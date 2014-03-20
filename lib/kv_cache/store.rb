@@ -9,7 +9,7 @@ module KvCache
         res = storer.get(key)
         return res if res
 
-        res = yield
+        res = (yield rescue nil)
 
         storer.set(key, res, expire_time)
 
