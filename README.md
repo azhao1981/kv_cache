@@ -20,14 +20,21 @@ Or install it yourself as:
 ## Usage
 
 ```
+require 'kv_cache'
+
 class City < ActiveRecord::Base
   attr_accessible :name, :province
   include KvCache
   
   # kv_cache :method_name, expire_time, :key, values_lambda
-  kv_cache :guangxi, nil, "guangxi", ->{ puts "fecth from db" ; where(province: "guangxi") }
+  scope :guangxi, ->{ puts "fecth from db" 
+                      Store.call {where(province: "guangxi")} }
   
-  after_save :kv_cache_reset("guangxi"), if: self.provine == 'guangxi' 
+  after_save :kv_cache_reset
+
+  def kv_cache_reset
+    Store.delete(self.province)
+  end
 end
 
   # some code 
