@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = KvCache::VERSION
   spec.authors       = ["azhao1981"]
   spec.email         = ["azhao.1981@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Since using kv_cache, Mami need't to warry my db crashing anymore. :)}
+  spec.summary       = %q{cache your data that you don't need to fetch from db.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "dalli"
 end
