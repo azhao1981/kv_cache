@@ -20,16 +20,18 @@ Or install it yourself as:
 ## Usage
 
 ```
-require 'kv_cache'
+  #config
+  opts = { :namespace => "app_v2", :compress => true }
+  KvCache::Store.storer = Dalli::Client.new('127.0.0.1:11211', opts)
 
+  #class
 class City < ActiveRecord::Base
   attr_accessible :name, :province
   include KvCache
   
-  # kv_cache :method_name, expire_time, :key, values_lambda
-  scope :guangxi, ->{ puts "fecth from db" 
-                      Store.call {where(province: "guangxi")} }
-  
+  def of_province(prv)
+     Store.call("#City.of_province:#{prv}") {where(province: prv)}
+  end
   after_save :kv_cache_reset
 
   def kv_cache_reset
@@ -38,12 +40,12 @@ class City < ActiveRecord::Base
 end
 
   # some code 
-  City.guangxi  # first call will :
+  City.of_province("guangxi")  # first call will :
   			    # fecth from db
   			    # select * from cities where province = 'guangxi'
-  cs = City.guangxi  # will just return result above
+  cs = City.of_province("guangxi")  # will just return result above
   cs.first.save      # will kv_cache_reset("guangxi") 
-  City.guangxi  # fecth from db again
+  City.of_province("guangxi")  # fecth from db again
   
 ```
 
