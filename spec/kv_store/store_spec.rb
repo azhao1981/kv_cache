@@ -69,4 +69,18 @@ describe "KvCache::Store" do
     res.should == 90
     KvCache::Store.delete("hello")
   end
+
+  it "#call auto Serializable" do
+    key = "Serializable"
+    KvCache::Store.delete(key)
+    res = KvCache::Store.call(key, 20) do 
+      { a: 9, b: 8}
+    end
+    res2 = KvCache::Store.call(key, 20) do 
+      { a: 9, b: 8}
+    end
+    res2.should be_kind_of(Hash)
+    res2[:b].should == 8
+    KvCache::Store.delete(key)
+  end
 end
