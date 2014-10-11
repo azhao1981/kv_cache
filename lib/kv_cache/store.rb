@@ -5,7 +5,7 @@ module KvCache
   class Store
     class << self
       # call yield if key is not exist
-      def call(key,expire_time)
+      def call(key,expire_time = 60)
         res = storer.get(key)
         return res if res
 
